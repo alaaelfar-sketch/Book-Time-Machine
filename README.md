@@ -1,3 +1,6 @@
+
+---
+
 # 📚 Book Time Machine
 
 ### 🧠 AI-Powered Historical Document Restoration System
@@ -6,153 +9,166 @@
   <img src="https://img.shields.io/badge/AI-Computer%20Vision-blue?style=for-the-badge&logo=opencv" />
   <img src="https://img.shields.io/badge/OCR-Tesseract-green?style=for-the-badge&logo=google" />
   <img src="https://img.shields.io/badge/UI-Streamlit-red?style=for-the-badge&logo=streamlit" />
-  <img src="https://img.shields.io/badge/Status-Active-success?style=for-the-badge" />
+  <img src="https://img.shields.io/badge/Status-Completed-success?style=for-the-badge" />
 </p>
 
 ---
 
-<p align="center">
-  <img src="https://media.giphy.com/media/3o7aD2saalBwwftBIY/giphy.gif" width="500"/>
-</p>
+## 🚀 Project Overview
 
----
+The **Book Time Machine** is an intelligent system designed to restore and analyze historical documents and old book pages using **Image Processing** and **Computer Vision techniques**.
 
-## 🚀 Overview
-
-**Book Time Machine** is an intelligent AI system that restores degraded historical documents using advanced:
-
-* 🖼️ Image Processing
-* 👁️ Computer Vision
-* ✍️ OCR (Optical Character Recognition)
-* 📊 Visual Analytics
-
-It transforms **old, damaged, and noisy documents** into **clean, readable, and structured digital content**.
+The goal is to transform **degraded, unclear pages** into **clean, readable digital versions**.
 
 ---
 
 ## 🧠 Core Idea
 
-> Not just image enhancement — but **full document intelligence**
+This project does not only enhance images, but also provides a full **visual analysis of document condition before and after restoration**.
 
-The system:
+It acts as both:
 
-* Restores images
-* Detects damage
-* Extracts text
-* Evaluates quality
-* Visualizes every step
+* 🖼️ Restoration Tool
+* 📊 Analytical System
+
+---
+
+## 📥 Input (Old Historical Documents)
+
+<p align="center">
+  <img src="assets/old_book_1.jpg" width="300"/>
+  <img src="assets/old_book_2.jpg" width="300"/>
+</p>
+
+👉 Real-world degraded documents with noise, fading, and damage
 
 ---
 
 ## ⚙️ System Pipeline
 
-```mermaid
-flowchart TD
-A[Input Image] --> B[Damage Analysis]
-B --> C[Image Enhancement]
-C --> D[OCR Extraction]
-D --> E[Visualization Dashboard]
-```
+1️⃣ Upload document image
+2️⃣ Damage analysis
+3️⃣ Image enhancement (denoise, contrast, inpainting)
+4️⃣ OCR text extraction
+5️⃣ Visualization dashboard (Streamlit)
 
 ---
 
-## 🔥 Core Innovations
+## 🔥 Core Innovation
 
-### 🥇 Comparison Engine
+---
+
+### 🥇 Comparison Engine (Before → After)
 
 <p align="center">
-  <img src="https://media.giphy.com/media/l0HlNQ03J5JxX6lva/giphy.gif" width="300"/>
+  <img src="assets/before.jpg" width="300"/>
+  <img src="assets/after.jpg" width="300"/>
 </p>
 
-* Original Image
-* Processing Stages
-* Final Restored Output
-
-👉 Shows **step-by-step transformation**
+👉 Shows full transformation from degraded → restored document
 
 ---
 
 ### 🥈 Damage Heatmap
 
 <p align="center">
-  <img src="https://media.giphy.com/media/xT9IgzoKnwFNmISR8I/giphy.gif" width="300"/>
+  <img src="assets/heatmap.jpg" width="500"/>
 </p>
 
-* 🔴 Damaged regions
-* 🟡 Medium degradation
+👉 Highlights damaged regions:
+
+* 🔴 Noise
+* 🟡 Fading
 * 🟢 Clean areas
 
-👉 Visualizes **where the document is broken**
+---
+
+### 🥉 OCR Output (Text Extraction)
+
+* Extracts readable text from restored image
+* Converts image → digital text
+* Displays structured output
 
 ---
 
-### 🥉 OCR Confidence Map
+## 💻 Deployment (Streamlit App)
 
-<p align="center">
-  <img src="https://media.giphy.com/media/26tn33aiTi1jkl6H6/giphy.gif" width="300"/>
-</p>
+Users can:
 
-* 🟢 High confidence text
-* 🟡 Medium confidence
-* 🔴 Low confidence
-
-👉 Not just text — but **trust-aware OCR output**
+* 📤 Upload images
+* 🔍 View processing pipeline
+* 🔄 Compare results
+* 📊 Explore OCR output
 
 ---
 
-## 💻 Tech Stack
+## 🎯 Key Features
 
-<p align="center">
-
-<img src="https://img.shields.io/badge/Python-3776AB?style=for-the-badge&logo=python&logoColor=white"/>
-<img src="https://img.shields.io/badge/OpenCV-5C3EE8?style=for-the-badge&logo=opencv&logoColor=white"/>
-<img src="https://img.shields.io/badge/Tesseract-4285F4?style=for-the-badge&logo=google&logoColor=white"/>
-<img src="https://img.shields.io/badge/Streamlit-FF4B4B?style=for-the-badge&logo=streamlit&logoColor=white"/>
-
-</p>
+* ✔ End-to-end AI pipeline
+* ✔ Image restoration system
+* ✔ Damage detection (heatmap)
+* ✔ OCR text extraction
+* ✔ Visual analytics dashboard
+* ✔ Interactive Streamlit UI
 
 ---
 
-## 🖥️ Features
+## 📊 Expected Output
 
-* 📤 Upload old document images
-* 🔍 Damage detection & analysis
-* 🎨 Image restoration pipeline
-* ✍️ OCR text extraction
-* 📊 Confidence visualization
-* ⚡ Real-time Streamlit UI
+* 🧾 Restored document
+* 🔥 Damage heatmap
+* ✍️ Extracted text
+* 📊 Visual analysis results
 
 ---
 
-## 📊 Output Examples
+## 💡 Project Value
 
-| Stage      | Output               |
-| ---------- | -------------------- |
-| Input      | 📄 Degraded document |
-| Analysis   | 🔥 Damage heatmap    |
-| Processing | 🧠 Enhanced image    |
-| Output     | ✍️ Extracted text    |
+✔ Restores historical documents
+✔ Explains AI decisions visually
+✔ Combines CV + OCR + Visualization
+✔ Provides full end-to-end pipeline
 
----
-
-## 🌟 Project Value
-
-✔ Preserves historical documents
-✔ Restores unreadable content
-✔ Visualizes degradation scientifically
-✔ Evaluates OCR accuracy
-✔ Provides full AI pipeline transparency
+👉 Not just enhancement — **intelligent document understanding system**
 
 ---
 
 ## 🏁 Conclusion
 
-The **Book Time Machine** is a complete AI system that combines:
+The **Book Time Machine** transforms damaged historical documents into readable digital content while visually explaining every step of the AI process.
 
-> 🧠 Intelligence + 🖼️ Vision + ✍️ Text + 📊 Analytics
+---
 
-to reconstruct and understand historical documents like never before.
+## 📁 Project Structure
 
+```bash id="k8p1aa"
+Book-Time-Machine/
+│
+├── app.py
+├── requirements.txt
+├── README.md
+│
+├── src/
+│   ├── preprocessing.py
+│   ├── restoration.py
+│   ├── damage_analysis.py
+│   ├── ocr.py
+│   ├── visualization.py
+│   └── pipeline.py
+│
+├── data/
+│   ├── raw/
+│   └── processed/
+│
+├── outputs/
+│   ├── restored/
+│   ├── heatmaps/
+│   └── extracted_text/
+│
+├── notebooks/
+├── tests/
+└── docs/
+```
 ---
 
 ## 👨‍💻 Developer Notes
