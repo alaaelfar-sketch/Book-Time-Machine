@@ -148,26 +148,55 @@ Book-Time-Machine/
 ├── requirements.txt
 ├── README.md
 │
-├── src/
-│   ├── preprocessing.py
-│   ├── restoration.py
-│   ├── damage_analysis.py
-│   ├── ocr.py
-│   ├── visualization.py
-│   └── pipeline.py
+├── config/
+│   ├── paths.py
+│   ├── settings.py
+│   └── constants.py
 │
 ├── data/
 │   ├── raw/
+│   │   ├── historical_docs/
+│   │   ├── damage_dataset/
+│   │   │   ├── blur/
+│   │   │   ├── fade/
+│   │   │   ├── noise/
+│   │   │   └── stain/
+│   │   └── ocr_dataset/
+│   │       ├── images/
+│   │       └── labels/
 │   └── processed/
 │
-├── outputs/
-│   ├── restored/
-│   ├── heatmaps/
-│   └── extracted_text/
+├── src/
+│   ├── core/
+│   │   ├── preprocessing.py
+│   │   ├── restoration.py
+│   │   ├── damage_analysis.py
+│   │   ├── ocr_engine.py
+│   │   └── pipeline.py
 │
-├── notebooks/
-├── tests/
-└── docs/
+│   ├── evaluation/
+│   │   ├── image_metrics.py
+│   │   ├── ocr_metrics.py
+│   │   └── evaluator.py
+│
+│   ├── visualization/
+│   │   ├── plots.py
+│   │   ├── heatmaps.py
+│   │   └── comparison.py
+│
+│   ├── io/
+│   │   ├── loader.py
+│   │   ├── saver.py
+│   │   └── dataset.py
+│
+│   ├── utils/
+│   │   ├── logger.py
+│   │   └── helpers.py
+│
+├── scripts/
+│   └── organize_data.py
+│
+└── tests/
 ```
 ---
 
