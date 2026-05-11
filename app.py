@@ -1,258 +1,161 @@
-"""
-📚 Book Time Machine — Streamlit Interface
-===========================================
-Interactive document restoration + analysis dashboard.
-UI layer only (no heavy logic).
-"""
-
-import sys
-from pathlib import Path
-
 import streamlit as st
-import numpy as np
 import cv2
+import numpy as np
+import re
 
-from config.settings import Settings
-from src.core.pipeline import DocumentPipeline, PipelineResult
-from src.visualization.plots import render_image
-from src.visualization.heatmaps import (
-    build_damage_heatmap_overlay,
-    build_ocr_confidence_map,
-    build_individual_damage_overlays,
-)
-from src.visualization.comparison import build_comparison_grid
+from src.pipeline import restore_image
+from src.ocr import extract_text_with_confidence
+from src.damage import analyze_damage, generate_heatmap
 
 
 # =========================
-# 📦 Project setup
-# =========================
-PROJECT_ROOT = Path(__file__).resolve().parent
-if str(PROJECT_ROOT) not in sys.path:
-    sys.path.insert(0, str(PROJECT_ROOT))
-
-
-# =========================
-# 🌐 Streamlit config
+# UI CONFIG
 # =========================
 st.set_page_config(
-    page_title="📚 Book Time Machine",
-    page_icon="📚",
-    layout="wide",
-    initial_sidebar_state="expanded",
+    page_title="Book Time Machine",
+    layout="wide"
+)
+
+st.title("📚 Book Time Machine - Enhanced OCR System")
+
+
+# =========================
+# TEXT CLEANER
+# =========================
+def clean_text(text):
+
+    if not text:
+        return ""
+
+    text = re.sub(r'\s+', ' ', text)
+    text = re.sub(r"[^A-Za-z0-9.,;:()'\"\\\- ]+", "", text)
+
+    fixes = {
+        "thatthe": "that the",
+        "Abd-ul": "Abdul",
+        "in- vestigate": "investigate",
+    }
+
+    for k, v in fixes.items():
+        text = text.replace(k, v)
+
+    return text.strip()
+
+
+# =========================
+# IMAGE LOADER
+# =========================
+def load_uploaded_image(uploaded):
+    file_bytes = np.frombuffer(uploaded.read(), np.uint8)
+    return cv2.imdecode(file_bytes, cv2.IMREAD_COLOR)
+
+
+# =========================
+# UPLOAD
+# =========================
+uploaded = st.file_uploader(
+    "Upload Image",
+    type=["png", "jpg", "jpeg", "tiff"]
 )
 
 
 # =========================
-# 🎨 UI Styling
+# MAIN PIPELINE
 # =========================
-st.markdown("""
-<style>
-.block-container { padding-top: 1.5rem; }
+if uploaded:
 
-h1 { font-size: 2.2rem !important; }
-h2 { font-size: 1.5rem !important; }
+    img = load_uploaded_image(uploaded)
 
-.metric-card {
-    background: linear-gradient(135deg, #1e1e2f, #2a2a40);
-    border-radius: 12px;
-    padding: 1rem;
-    border: 1px solid #3a3a55;
-}
-</style>
-""", unsafe_allow_html=True)
+    # Restore image
+    restored = restore_image(img)
 
+    # OCR
+    text, confidence_map, avg_conf = extract_text_with_confidence(restored)
 
-# =========================
-# 🧠 Session state
-# =========================
-@st.cache_resource
-def get_settings():
-    return Settings()
+    # Clean text
+    text = clean_text(text)
+
+    # =========================
+    # DAMAGE ANALYSIS 🔥
+    # =========================
+    damage_result = analyze_damage(restored)
+    heatmap = generate_heatmap(restored, damage_result["damage_score_map"])
 
 
-@st.cache_resource
-def get_pipeline():
-    return DocumentPipeline(get_settings())
-
-
-# =========================
-# 📤 Upload image
-# =========================
-def upload_image():
-    file = st.file_uploader(
-        "📤 Upload document",
-        type=["jpg", "png", "jpeg", "tiff", "bmp"]
-    )
-
-    if file is None:
-        return None
-
-    data = np.frombuffer(file.read(), np.uint8)
-    img = cv2.imdecode(data, cv2.IMREAD_COLOR)
-
-    if img is None:
-        st.error("Invalid image file")
-        return None
-
-    # convert BGR → RGB (مهم للعرض)
-    img = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
-
-    return img
-
-
-# =========================
-# 📊 Sidebar
-# =========================
-def sidebar():
-    st.sidebar.title("⚙️ Settings")
-
-    settings = get_settings()
-
-    settings.MEDIAN_KERNEL = st.sidebar.selectbox("Median kernel", [3, 5, 7], 0)
-    settings.CLAHE_CLIP_LIMIT = st.sidebar.slider("CLAHE", 0.5, 5.0, 2.0)
-    settings.INPAINT_RADIUS = st.sidebar.slider("Inpaint radius", 1, 15, 5)
-
-    mask_thresh = st.sidebar.slider("Mask threshold", 40, 200, 80)
-
-    return settings, mask_thresh
-
-
-# =========================
-# 🏠 Overview Tab
-# =========================
-def tab_overview(r: PipelineResult):
-    st.title("📊 Overview")
-
+    # =========================
+    # LAYOUT
+    # =========================
     col1, col2 = st.columns(2)
 
     with col1:
-        st.image(render_image(r.original), caption="Original")
+        st.subheader("📷 Original")
+        st.image(img, channels="BGR")
 
     with col2:
-        st.image(render_image(r.restoration.best_final), caption="Restored")
-
-    st.metric("Final Score", f"{r.evaluation.final_score:.1f}/100")
-
-    st.write("**Pipeline:**", " → ".join(r.restoration.best_chain))
+        st.subheader("✨ Restored")
+        st.image(restored, channels="BGR")
 
 
-# =========================
-# 🔍 Damage Tab
-# =========================
-def tab_damage(r: PipelineResult):
-    st.title("🔍 Damage Analysis")
+    # =========================
+    # BLEND VIEW
+    # =========================
+    st.subheader("🔀 Before / After Comparison")
 
-    st.image(
-        render_image(
-            build_damage_heatmap_overlay(
-                r.original,
-                r.damage_report.combined_heatmap
-            )
-        )
+    alpha = st.slider("Blend Strength", 0.0, 1.0, 0.7)
+
+    blended = cv2.addWeighted(img, 1 - alpha, restored, alpha, 0)
+    st.image(blended, channels="BGR")
+
+
+    # =========================
+    # OCR RESULT
+    # =========================
+    st.subheader("🧠 Extracted Text")
+    st.text_area("", text, height=200)
+
+
+    # =========================
+    # CONFIDENCE MAP
+    # =========================
+    st.subheader("📊 OCR Confidence Map")
+    st.image(confidence_map, channels="BGR")
+
+    st.metric("Average OCR Confidence", f"{avg_conf:.2f}%")
+
+
+    # =========================
+    # DAMAGE ANALYSIS 🔥
+    # =========================
+    st.subheader("🛠️ Damage Detection Results")
+
+    col3, col4, col5 = st.columns(3)
+
+    with col3:
+        st.image(damage_result["noise_map"], caption="Noise Regions")
+
+    with col4:
+        st.image(damage_result["faded_map"], caption="Faded Text")
+
+    with col5:
+        st.image(damage_result["stain_map"], caption="Stains / Broken Areas")
+
+
+    # =========================
+    # HEATMAP
+    # =========================
+    st.subheader("🔥 Damage Heatmap")
+
+    st.image(heatmap, channels="BGR")
+
+    st.metric(
+        "Damage Score",
+        f"{damage_result['damage_score']:.2f}"
     )
 
-    overlays = build_individual_damage_overlays(
-        r.original,
-        r.damage_report.maps
-    )
 
-    for k, v in overlays.items():
-        st.subheader(k)
-        st.image(render_image(v))
-
-
-# =========================
-# ⚙️ Stages Tab
-# =========================
-def tab_stages(r: PipelineResult):
-    st.title("⚙️ Pipeline Stages")
-
-    i = st.slider("Stage", 0, len(r.stage_labels) - 1, 0)
-
-    label = r.stage_labels[i]
-    st.image(render_image(r.stage_images[label]), caption=label)
-
-
-# =========================
-# 🧪 Comparison Tab
-# =========================
-def tab_comparison(r: PipelineResult):
-    st.title("🧪 Method Comparison")
-
-    for group in [
-        r.restoration.denoised,
-        r.restoration.enhanced,
-        r.restoration.sharpened,
-    ]:
-        grid = build_comparison_grid(group, cols=3)
-        for row in grid:
-            st.image(render_image(row))
-
-
-# =========================
-# 📝 OCR Tab
-# =========================
-def tab_ocr(r: PipelineResult):
-    st.title("📝 OCR")
-
-    st.image(
-        render_image(build_ocr_confidence_map(r.original, r.ocr_original))
-    )
-
-    st.code(r.ocr_original.full_text)
-
-
-# =========================
-# 📊 Evaluation Tab
-# =========================
-def tab_eval(r: PipelineResult):
-    st.title("📊 Evaluation")
-
-    st.json(r.evaluation.details)
-    st.text(r.evaluation.text_report)
-
-
-# =========================
-# 🚀 Main App
-# =========================
-def main():
-    st.title("📚 Book Time Machine")
-
-    settings, thresh = sidebar()
-
-    image = upload_image()
-
-    if image is None:
-        st.info("📤 Upload an image to start")
-        return
-
-    pipeline = get_pipeline()
-
-    with st.spinner("Running pipeline..."):
-        result = pipeline.run(image)
-
-    tabs = st.tabs([
-        "Overview",
-        "Damage",
-        "Stages",
-        "Comparison",
-        "OCR",
-        "Evaluation"
-    ])
-
-    with tabs[0]:
-        tab_overview(result)
-    with tabs[1]:
-        tab_damage(result)
-    with tabs[2]:
-        tab_stages(result)
-    with tabs[3]:
-        tab_comparison(result)
-    with tabs[4]:
-        tab_ocr(result)
-    with tabs[5]:
-        tab_eval(result)
-
-
-if __name__ == "__main__":
-    main()
+    # =========================
+    # DEBUG VIEW
+    # =========================
+    with st.expander("🔍 Debug View (Grayscale)"):
+        gray = cv2.cvtColor(restored, cv2.COLOR_BGR2GRAY)
+        st.image(gray, clamp=True)

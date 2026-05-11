@@ -1,213 +1,263 @@
-
----
-
 # 📚 Book Time Machine
 
-### 🧠 AI-Powered Historical Document Restoration System
+An intelligent document restoration and analysis system for historical books and damaged documents using **Computer Vision**, **Image Processing**, and **OCR** techniques.
 
-<p align="center">
-  <img src="https://img.shields.io/badge/AI-Computer%20Vision-blue?style=for-the-badge&logo=opencv" />
-  <img src="https://img.shields.io/badge/OCR-Tesseract-green?style=for-the-badge&logo=google" />
-  <img src="https://img.shields.io/badge/UI-Streamlit-red?style=for-the-badge&logo=streamlit" />
-  <img src="https://img.shields.io/badge/Status-Completed-success?style=for-the-badge" />
-</p>
+The system restores degraded document pages, analyzes damage levels, extracts readable text, and visualizes the entire restoration process interactively.
 
 ---
 
-## 🚀 Project Overview
+# 🚀 Project Overview
 
-The **Book Time Machine** is an intelligent system designed to restore and analyze historical documents and old book pages using **Image Processing** and **Computer Vision techniques**.
+Old books and historical documents often suffer from:
 
-The goal is to transform **degraded, unclear pages** into **clean, readable digital versions**.
+- Noise
+- Fading text
+- Low contrast
+- Physical degradation
+- Blurred content
 
----
+The **Book Time Machine** helps transform damaged pages into cleaner and more readable digital versions while also providing visual insights into the restoration quality.
 
-## 🧠 Core Idea
+This project combines:
 
-This project does not only enhance images, but also provides a full **visual analysis of document condition before and after restoration**.
+- Image Restoration
+- Damage Analysis
+- OCR (Optical Character Recognition)
+- Visual Analytics
+- Interactive Visualization
 
-It acts as both:
-
-* 🖼️ Restoration Tool
-* 📊 Analytical System
-
----
-
-## 📥 Input (Old Historical Documents)
-
-<p align="center">
-  <img src="assets/old_book_1.jpg" width="300"/>
-  <img src="assets/old_book_2.jpg" width="300"/>
-</p>
-
-👉 Real-world degraded documents with noise, fading, and damage
+into one complete intelligent pipeline.
 
 ---
 
-## ⚙️ System Pipeline
+# 🧠 Core Features
 
-1️⃣ Upload document image
-2️⃣ Damage analysis
-3️⃣ Image enhancement (denoise, contrast, inpainting)
-4️⃣ OCR text extraction
-5️⃣ Visualization dashboard (Streamlit)
+## ✨ Document Restoration
+Enhances degraded document images using image processing techniques such as:
 
----
-
-## 🔥 Core Innovation
+- Denoising
+- Contrast Enhancement
+- Sharpening
+- Edge Preservation
 
 ---
 
-### 🥇 Comparison Engine (Before → After)
+## 🔍 Damage Detection & Analysis
+Analyzes document degradation and computes a damage score.
 
-<p align="center">
-  <img src="assets/before.jpg" width="300"/>
-  <img src="assets/after.jpg" width="300"/>
-</p>
+The system highlights:
+- Noise regions
+- Faded areas
+- Damaged sections
 
-👉 Shows full transformation from degraded → restored document
-
----
-
-### 🥈 Damage Heatmap
-
-<p align="center">
-  <img src="assets/heatmap.jpg" width="500"/>
-</p>
-
-👉 Highlights damaged regions:
-
-* 🔴 Noise
-* 🟡 Fading
-* 🟢 Clean areas
+using visual damage maps.
 
 ---
 
-### 🥉 OCR Output (Text Extraction)
+## 📝 OCR Text Extraction
+Extracts readable text from restored documents using OCR.
 
-* Extracts readable text from restored image
-* Converts image → digital text
-* Displays structured output
+Features:
+- Word-level confidence scores
+- OCR confidence visualization
+- Extracted text display
 
 ---
 
-## 💻 Deployment (Streamlit App)
+## 🎨 OCR Confidence Visualization
+Each detected word is color-coded based on OCR confidence:
+
+- 🟢 High Confidence
+- 🟡 Medium Confidence
+- 🔴 Low Confidence
+
+This helps evaluate OCR quality visually instead of relying only on raw text output.
+
+---
+
+## 📊 Interactive Visualization
+Built with **Streamlit** to provide an interactive user experience.
 
 Users can:
-
-* 📤 Upload images
-* 🔍 View processing pipeline
-* 🔄 Compare results
-* 📊 Explore OCR output
-
----
-
-## 🎯 Key Features
-
-* ✔ End-to-end AI pipeline
-* ✔ Image restoration system
-* ✔ Damage detection (heatmap)
-* ✔ OCR text extraction
-* ✔ Visual analytics dashboard
-* ✔ Interactive Streamlit UI
+- Upload document images
+- View restoration stages
+- Compare original vs restored images
+- Explore OCR analysis results
+- Inspect damage heatmaps
 
 ---
 
-## 📊 Expected Output
+# ⚙️ System Pipeline
 
-* 🧾 Restored document
-* 🔥 Damage heatmap
-* ✍️ Extracted text
-* 📊 Visual analysis results
-
----
-
-## 💡 Project Value
-
-✔ Restores historical documents
-✔ Explains AI decisions visually
-✔ Combines CV + OCR + Visualization
-✔ Provides full end-to-end pipeline
-
-👉 Not just enhancement — **intelligent document understanding system**
+```text
+Input Image
+    ↓
+Damage Analysis
+    ↓
+Image Enhancement
+    ↓
+OCR Extraction
+    ↓
+Confidence Evaluation
+    ↓
+Interactive Visualization
+```
 
 ---
 
-## 🏁 Conclusion
+# 🏗️ Project Structure
 
-The **Book Time Machine** transforms damaged historical documents into readable digital content while visually explaining every step of the AI process.
-
----
-
-## 📁 Project Structure
-
-```bash id="k8p1aa"
+```text
 Book-Time-Machine/
 │
-├── app.py
-├── requirements.txt
-├── README.md
-│
-├── config/
-│   ├── paths.py
-│   ├── settings.py
-│   └── constants.py
-│
-├── data/
-│   ├── raw/
-│   │   ├── historical_docs/
-│   │   ├── damage_dataset/
-│   │   │   ├── blur/
-│   │   │   ├── fade/
-│   │   │   ├── noise/
-│   │   │   └── stain/
-│   │   └── ocr_dataset/
-│   │       ├── images/
-│   │       └── labels/
-│   └── processed/
+├── app.py                          # Streamlit UI
 │
 ├── src/
-│   ├── core/
-│   │   ├── preprocessing.py
-│   │   ├── restoration.py
-│   │   ├── damage_analysis.py
-│   │   ├── ocr_engine.py
-│   │   └── pipeline.py
+│   │
+│   ├── pipeline.py                # Main restoration pipeline
+│   ├── enhancement.py             # Image enhancement functions
+│   ├── damage.py                  # Damage analysis & scoring
+│   ├── ocr.py                     # OCR extraction & confidence
+│   ├── evaluation.py              # Metrics & evaluation
 │
-│   ├── evaluation/
-│   │   ├── image_metrics.py
-│   │   ├── ocr_metrics.py
-│   │   └── evaluator.py
-│
-│   ├── visualization/
-│   │   ├── plots.py
-│   │   ├── heatmaps.py
-│   │   └── comparison.py
-│
-│   ├── io/
-│   │   ├── loader.py
-│   │   ├── saver.py
-│   │   └── dataset.py
-│
-│   ├── utils/
-│   │   ├── logger.py
-│   │   └── helpers.py
-│
-├── scripts/
-│   └── organize_data.py
-│
-└── tests/
+├── requirements.txt
+└── README.md
 ```
----
-
-## 👨‍💻 Developer Notes
-
-> Built with passion for Computer Vision, AI, and Digital Preservation.
 
 ---
 
-## ⭐ If you like this project
+# 🛠️ Technologies Used
 
-Give it a ⭐ on GitHub to support development!
+- Python
+- OpenCV
+- NumPy
+- Streamlit
+- Tesseract OCR
+- PIL / Pillow
 
 ---
+
+# 📦 Installation
+
+## 1️⃣ Clone the Repository
+
+```bash
+git clone https://github.com/your-username/Book-Time-Machine.git
+cd Book-Time-Machine
+```
+
+---
+
+## 2️⃣ Install Dependencies
+
+```bash
+pip install -r requirements.txt
+```
+
+---
+
+## 3️⃣ Install Tesseract OCR
+
+### Windows
+Download and install:
+
+https://github.com/UB-Mannheim/tesseract/wiki
+
+Then add Tesseract to your system PATH.
+
+---
+
+# ▶️ Run the Application
+
+```bash
+streamlit run app.py
+```
+
+---
+
+# 📸 Example Outputs
+
+The system generates:
+
+- Original document image
+- Restored image
+- Damage heatmap
+- OCR confidence visualization
+- Extracted text
+- Damage score
+- OCR confidence metrics
+
+---
+
+# 📈 Evaluation Metrics
+
+The project evaluates restoration quality using:
+
+- OCR Confidence Score
+- Damage Score
+- Sharpness Analysis
+- Contrast Evaluation
+
+---
+
+# 💡 Project Innovation
+
+Unlike traditional restoration systems that only enhance images, this project provides:
+
+✅ Step-by-step restoration visualization  
+✅ Damage analysis before restoration  
+✅ OCR confidence mapping  
+✅ Interactive visual analytics  
+✅ End-to-end intelligent pipeline
+
+---
+
+# 🎯 Future Improvements
+
+Potential future enhancements include:
+
+- Deep Learning based restoration
+- GAN-based image enhancement
+- Transformer OCR models
+- Automatic document segmentation
+- Historical handwriting recognition
+- Multi-language OCR support
+
+---
+
+# 🖥️ Streamlit Interface
+
+The application allows users to:
+
+- Upload damaged document images
+- Compare before/after restoration
+- View OCR confidence maps
+- Analyze damage visually
+- Explore restoration metrics interactively
+
+---
+
+# 📚 Use Cases
+
+- Historical document restoration
+- Digital archiving
+- Library preservation systems
+- OCR preprocessing
+- Manuscript digitization
+- Research & education
+
+---
+
+# 🏁 Conclusion
+
+The **Book Time Machine** is a complete intelligent system that combines:
+
+- Image Restoration
+- OCR
+- Damage Analysis
+- Visual Analytics
+
+to transform degraded historical documents into readable digital versions while providing deep insight into restoration quality and OCR reliability.
+
+---
+
