@@ -15,7 +15,7 @@ def load_image(path):
 
 
 # =========================
-# 2. Denoising (خفيف)
+# 2. Denoising 
 # =========================
 def denoise(img):
     return cv2.fastNlMeansDenoisingColored(img, None, 8, 8, 7, 21)
@@ -63,7 +63,7 @@ def deskew(img):
 
 
 # =========================
-# 5. Sharpen (خفيف جدًا)
+# 5. Sharpen 
 # =========================
 def sharpen(img):
     kernel = np.array([
@@ -82,7 +82,7 @@ def restore_image(img):
     img = denoise(img)
     img = enhance_contrast(img)
 
-    img = deskew(img)   # 🔥 مهم جدًا هنا
+    img = deskew(img)  
 
     img = sharpen(img)
 
